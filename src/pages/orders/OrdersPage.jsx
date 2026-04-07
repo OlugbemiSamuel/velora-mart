@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 
 import "./OrdersPage.css";
 
-import { Camera, CameraIcon, Heart } from "lucide-react";
+import buyagain from '../../assets/images/icons/buy-again.png'
 
 const OrdersPage = () => {
   return (
@@ -50,7 +50,7 @@ const OrdersPage = () => {
                 <button class="buy-again-button button-primary">
                   <img
                     class="buy-again-icon"
-                    src="images/icons/buy-again.png"
+                    src={buyagain}
                   />
                   <span class="buy-again-message">Add to Cart</span>
                 </button>
