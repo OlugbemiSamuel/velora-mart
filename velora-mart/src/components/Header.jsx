@@ -29,15 +29,15 @@ const Header = () => {
       </div>
 
       <div class="right-section">
-        <NavLink class="orders-link header-link" to="/orders" >
+        <Link class="orders-link header-link" to="/orders" >
           <span class="orders-text">Orders</span>
-        </NavLink>
+        </Link>
 
-        <NavLink class="cart-link header-link" to="/checkout">
+        <Link class="cart-link header-link" to="/checkout">
           <img class="cart-icon" src={carticon} />
           <div class="cart-quantity">3</div>
           <div class="cart-text">Cart</div>
-        </NavLink>
+        </Link>
       </div>
     </div>
     )

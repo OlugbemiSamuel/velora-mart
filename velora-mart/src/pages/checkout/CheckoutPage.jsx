@@ -1,8 +1,28 @@
 import './CheckoutHeader.css'
 import './Checkout.css'
 import Header from '../../components/Header'
+import { formatMoney } from '../../utils/Money'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
-const CheckoutPage = () => {
+const CheckoutPage = ({carts}) => {
+
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
+
+  useEffect(() => {
+    const getDeliveryOption = async () => {
+      try{
+        const response = await axios.get('/api/delivery-options?expand=estimatedDeliveryTime');
+        setDeliveryOptions(response.data);
+      } catch(error) {
+        console.error('deliveryoption error:', error)
+      }
+    }
+    getDeliveryOption();
+  }, [])
+
+
     return(
         <>
 
@@ -20,9 +40,17 @@ const CheckoutPage = () => {
 
       <div class="checkout-grid">
         <div class="order-summary">
-          <div class="cart-item-container">
+          { deliveryOptions.length > 0 && carts.map((cartItem) => {
+
+            const deliveryDate = deliveryOptions.find((deliveryOption) => {
+             return deliveryOption.id === cartItem.deliveryOptionId
+
+            })
+
+            return(
+               <div key={cartItem.productId} class="cart-item-container">
             <div class="delivery-date">
-              Delivery date: Tuesday, June 21
+              Delivery date: {dayjs(deliveryDate.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
             </div>
 
             <div class="cart-item-details-grid">
@@ -31,14 +59,14 @@ const CheckoutPage = () => {
 
               <div class="cart-item-details">
                 <div class="product-name">
-                  Black and Gray Athletic Cotton Socks - 6 Pairs
+                 {cartItem.product.name}
                 </div>
                 <div class="product-price">
-                  $10.90
+                 {formatMoney(cartItem.product.priceCents)}
                 </div>
                 <div class="product-quantity">
                   <span>
-                    Quantity: <span class="quantity-label">2</span>
+                    Quantity: <span class="quantity-label">{cartItem.quantity}</span>
                   </span>
                   <span class="update-quantity-link link-primary">
                     Update
@@ -53,122 +81,43 @@ const CheckoutPage = () => {
                 <div class="delivery-options-title">
                   Choose a delivery option:
                 </div>
-                <div class="delivery-option">
-                  <input type="radio" checked
-                    class="delivery-option-input"
-                    name="delivery-option-1" />
-                  <div>
-                    <div class="delivery-option-date">
-                      Tuesday, June 21
-                    </div>
-                    <div class="delivery-option-price">
-                      FREE Shipping
-                    </div>
-                  </div>
-                </div>
-                <div class="delivery-option">
+                {deliveryOptions.map((deliveryOption) => {
+                  let shippingFee = 'FREE Shipping';
+
+                  if(deliveryOption.priceCents > 0) {
+                    shippingFee = formatMoney(deliveryOption.priceCents)
+                  }
+
+
+                  return (
+                     <div key={deliveryOption.id} class="delivery-option">
                   <input type="radio"
+                   checked = {deliveryOption.id === cartItem.deliveryOptionId}
                     class="delivery-option-input"
-                    name="delivery-option-1" />
+                    name={`delivery-option-${cartItem.productId}` }/>
                   <div>
                     <div class="delivery-option-date">
-                      Wednesday, June 15
+                     {dayjs(deliveryOption.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
                     </div>
                     <div class="delivery-option-price">
-                      $4.99 - Shipping
+                      {shippingFee}
                     </div>
                   </div>
                 </div>
-                <div class="delivery-option">
-                  <input type="radio"
-                    class="delivery-option-input"
-                    name="delivery-option-1" />
-                  <div>
-                    <div class="delivery-option-date">
-                      Monday, June 13
-                    </div>
-                    <div class="delivery-option-price">
-                      $9.99 - Shipping
-                    </div>
-                  </div>
-                </div>
+                  )
+
+                })
+                }
+               
+               
               </div>
             </div>
           </div>
+            )
+          })
 
-          <div class="cart-item-container">
-            <div class="delivery-date">
-              Delivery date: Wednesday, June 15
-            </div>
-
-            <div class="cart-item-details-grid">
-              <img class="product-image"
-                src="images/products/intermediate-composite-basketball.jpg" />
-
-              <div class="cart-item-details">
-                <div class="product-name">
-                  Intermediate Size Basketball
-                </div>
-                <div class="product-price">
-                  $20.95
-                </div>
-                <div class="product-quantity">
-                  <span>
-                    Quantity: <span class="quantity-label">1</span>
-                  </span>
-                  <span class="update-quantity-link link-primary">
-                    Update
-                  </span>
-                  <span class="delete-quantity-link link-primary">
-                    Delete
-                  </span>
-                </div>
-              </div>
-
-              <div class="delivery-options">
-                <div class="delivery-options-title">
-                  Choose a delivery option:
-                </div>
-
-                <div class="delivery-option">
-                  <input type="radio" class="delivery-option-input"
-                    name="delivery-option-2" />
-                  <div>
-                    <div class="delivery-option-date">
-                      Tuesday, June 21
-                    </div>
-                    <div class="delivery-option-price">
-                      FREE Shipping
-                    </div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input type="radio" checked class="delivery-option-input"
-                    name="delivery-option-2" />
-                  <div>
-                    <div class="delivery-option-date">
-                      Wednesday, June 15
-                    </div>
-                    <div class="delivery-option-price">
-                      $4.99 - Shipping
-                    </div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input type="radio" class="delivery-option-input"
-                    name="delivery-option-2" />
-                  <div>
-                    <div class="delivery-option-date">
-                      Monday, June 13
-                    </div>
-                    <div class="delivery-option-price">
-                      $9.99 - Shipping
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          }
+         
         </div>
 
         <div class="payment-summary">
