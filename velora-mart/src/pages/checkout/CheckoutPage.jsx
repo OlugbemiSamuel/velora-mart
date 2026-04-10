@@ -1,37 +1,32 @@
 import "./CheckoutHeader.css";
 import "./Checkout.css";
 import Header from "../../components/Header";
-import { formatMoney } from "../../utils/Money";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import dayjs from "dayjs";
+
+import OrderSummary from "./OrderSummary";
+import PaymentSummmary from "./PaymentSummary";
 
 const CheckoutPage = ({ carts }) => {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummmary, setPaymentSummary] = useState(null);
 
   useEffect(() => {
-    const getDeliveryOption = async () => {
+    const getCheckoutPageData = async () => {
       try {
-        const response = await axios.get(
-          "/api/delivery-options?expand=estimatedDeliveryTime",
-        );
-        setDeliveryOptions(response.data);
+        const [deliveryRes, paymentRes] = await Promise.all([
+           await axios.get("/api/delivery-options?expand=estimatedDeliveryTime"),
+           await axios.get("/api/payment-summary")
+        
+        ]);
+        setDeliveryOptions(deliveryRes.data);
+        setPaymentSummary(paymentRes.data)
       } catch (error) {
-        console.error("deliveryoption error:", error);
+        console.error("error loading checkout data:", error);
       }
     };
-    getDeliveryOption();
-
-    const getPaymentSummary = async () => {
-      try {
-        const response = await axios.get("/api/payment-summary");
-        setPaymentSummary(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getPaymentSummary();
+    getCheckoutPageData();
+  
   }, []);
 
   return (
@@ -49,142 +44,11 @@ const CheckoutPage = ({ carts }) => {
         <div class="page-title">Review your order</div>
 
         <div class="checkout-grid">
-          <div class="order-summary">
-            {deliveryOptions.length > 0 &&
-              carts.map((cartItem) => {
-                const deliveryDate = deliveryOptions.find((deliveryOption) => {
-                  return deliveryOption.id === cartItem.deliveryOptionId;
-                });
+          <OrderSummary carts={carts} deliveryOptions={deliveryOptions}/>
+          <PaymentSummmary paymentSummmary={paymentSummmary}/>
+         
 
-                return (
-                  <div key={cartItem.productId} class="cart-item-container">
-                    <div class="delivery-date">
-                      Delivery date:{" "}
-                      {dayjs(deliveryDate.estimatedDeliveryTimeMs).format(
-                        "dddd, MMMM D",
-                      )}
-                    </div>
-
-                    <div class="cart-item-details-grid">
-                      <img
-                        class="product-image"
-                        src={`${cartItem.product.image}`}
-                      />
-
-                      <div class="cart-item-details">
-                        <div class="product-name">{cartItem.product.name}</div>
-                        <div class="product-price">
-                          {formatMoney(cartItem.product.priceCents)}
-                        </div>
-                        <div class="product-quantity">
-                          <span>
-                            Quantity:{" "}
-                            <span class="quantity-label">
-                              {cartItem.quantity}
-                            </span>
-                          </span>
-                          <span class="update-quantity-link link-primary">
-                            Update
-                          </span>
-                          <span class="delete-quantity-link link-primary">
-                            Delete
-                          </span>
-                        </div>
-                      </div>
-
-                      <div class="delivery-options">
-                        <div class="delivery-options-title">
-                          Choose a delivery option:
-                        </div>
-                        {deliveryOptions.map((deliveryOption) => {
-                          let shippingFee = "FREE Shipping";
-
-                          if (deliveryOption.priceCents > 0) {
-                            shippingFee = formatMoney(
-                              deliveryOption.priceCents,
-                            );
-                          }
-
-                          return (
-                            <div
-                              key={deliveryOption.id}
-                              class="delivery-option"
-                            >
-                              <input
-                                type="radio"
-                                checked={
-                                  deliveryOption.id ===
-                                  cartItem.deliveryOptionId
-                                }
-                                class="delivery-option-input"
-                                name={`delivery-option-${cartItem.productId}`}
-                              />
-                              <div>
-                                <div class="delivery-option-date">
-                                  {dayjs(
-                                    deliveryOption.estimatedDeliveryTimeMs,
-                                  ).format("dddd, MMMM D")}
-                                </div>
-                                <div class="delivery-option-price">
-                                  {shippingFee}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-
-          <div class="payment-summary">
-            <div class="payment-summary-title">Payment Summary</div>
-
-            {paymentSummmary && (
-              <>
-                <div class="payment-summary-row">
-                  <div>Items ({paymentSummmary?.totalItems}):</div>
-                  <div class="payment-summary-money">
-                    {formatMoney(paymentSummmary.productCostCents)}
-                  </div>
-                </div>
-
-                <div class="payment-summary-row">
-                  <div>Shipping &amp; handling:</div>
-                  <div class="payment-summary-money">
-                    {formatMoney(paymentSummmary.shippingCostCents)}
-                  </div>
-                </div>
-
-                <div class="payment-summary-row subtotal-row">
-                  <div>Total before tax:</div>
-                  <div class="payment-summary-money">
-                    {formatMoney(paymentSummmary.totalCostBeforeTaxCents)}
-                  </div>
-                </div>
-
-                <div class="payment-summary-row">
-                  <div>Estimated tax (10%):</div>
-                  <div class="payment-summary-money">
-                    {formatMoney(paymentSummmary.taxCents)}
-                  </div>
-                </div>
-
-                <div class="payment-summary-row total-row">
-                  <div>Order total:</div>
-                  <div class="payment-summary-money">
-                    {formatMoney(paymentSummmary.totalCostCents)}
-                  </div>
-                </div>
-
-                <button class="place-order-button button-primary">
-                  Place your order
-                </button>
-              </>
-            )}
-          </div>
+         
         </div>
       </div>
     </>
