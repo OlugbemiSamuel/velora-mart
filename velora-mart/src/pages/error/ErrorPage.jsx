@@ -2,12 +2,12 @@ import Header from "../../components/Header"
 import './ErrorPage.css'
 
 
-const ErrorPage = () => {
+const ErrorPage = ({carts}) => {
 
     return (
         <>
 
-        <Header/>
+        <Header carts={carts} />
 
         <div className="error-page">
             <p className="error-number">404</p>
