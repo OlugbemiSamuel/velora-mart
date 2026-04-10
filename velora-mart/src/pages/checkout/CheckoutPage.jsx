@@ -6,6 +6,7 @@ import axios from "axios";
 
 import OrderSummary from "./OrderSummary";
 import PaymentSummmary from "./PaymentSummary";
+import CheckoutHeader from "./CheckoutHeader";
 
 const CheckoutPage = ({ carts }) => {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
@@ -34,7 +35,7 @@ const CheckoutPage = ({ carts }) => {
       <link rel="icon" type="image/svg+xml" href="/cart-favicon.png" />
 
       <title>Checkout</title>
-        <Header />
+        <CheckoutHeader carts={carts}/>
 
 
       {/* <div class="checkout-header">

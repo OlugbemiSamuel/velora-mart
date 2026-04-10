@@ -1,62 +1,33 @@
-import dayjs from "dayjs";
-import { formatMoney } from "../../utils/Money";
 import DeliveryOptions from "./DeliveryOptions";
+import CartItemDetails from "./CartItemDetails";
+import DeliveryDate from "./DeliveryDate";
 
-const OrderSummary = ({deliveryOptions, carts}) => {
+const OrderSummary = ({ deliveryOptions, carts }) => {
+  return (
+    <div class="order-summary">
+      {deliveryOptions.length > 0 &&
+        carts.map((cartItem) => {
+          const deliveryDate = deliveryOptions.find((deliveryOption) => {
+            return deliveryOption.id === cartItem.deliveryOptionId;
+          });
 
-    return (
+          return (
+            <div key={cartItem.productId} class="cart-item-container">
+              <DeliveryDate deliveryDate={deliveryDate} />
 
-         <div class="order-summary">
-            {deliveryOptions.length > 0 &&
-              carts.map((cartItem) => {
-                const deliveryDate = deliveryOptions.find((deliveryOption) => {
-                  return deliveryOption.id === cartItem.deliveryOptionId;
-                });
+              <div class="cart-item-details-grid">
+                <CartItemDetails cartItem={cartItem} />
 
-                return (
-                  <div key={cartItem.productId} class="cart-item-container">
-                    <div class="delivery-date">
-                      Delivery date:{" "}
-                      {dayjs(deliveryDate.estimatedDeliveryTimeMs).format(
-                        "dddd, MMMM D",
-                      )}
-                    </div>
+                <DeliveryOptions
+                  deliveryOptions={deliveryOptions}
+                  cartItem={cartItem}
+                />
+              </div>
+            </div>
+          );
+        })}
+    </div>
+  );
+};
 
-                    <div class="cart-item-details-grid">
-                      <img
-                        class="product-image"
-                        src={`${cartItem.product.image}`}
-                      />
-
-                      <div class="cart-item-details">
-                        <div class="product-name">{cartItem.product.name}</div>
-                        <div class="product-price">
-                          {formatMoney(cartItem.product.priceCents)}
-                        </div>
-                        <div class="product-quantity">
-                          <span>
-                            Quantity:{" "}
-                            <span class="quantity-label">
-                              {cartItem.quantity}
-                            </span>
-                          </span>
-                          <span class="update-quantity-link link-primary">
-                            Update
-                          </span>
-                          <span class="delete-quantity-link link-primary">
-                            Delete
-                          </span>
-                        </div>
-                      </div>
-                      <DeliveryOptions deliveryOptions={deliveryOptions} cartItem={cartItem}/>
-
-                     
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-    )
-}
-
-export default OrderSummary
+export default OrderSummary;
