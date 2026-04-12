@@ -5,10 +5,10 @@ import axios from "axios";
 import ProductsGrid from "./ProductsGrid";
 
 
-const HomePage = () => {
+const HomePage = ({carts, getCartItems}) => {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
+
     const getProducts = async () => {
       try{
         const response = await axios.get(`/api/products`);
@@ -20,6 +20,9 @@ const HomePage = () => {
       }
     };
 
+  useEffect(() => {
+  
+
   
     getProducts();
   
@@ -29,10 +32,10 @@ const HomePage = () => {
     <div>
       <link rel="icon" type="image/svg+xml" href="/home-favicon.png" />
 
-      <Header />
+      <Header carts={carts} />
 
       <div className="home-page">
-        <ProductsGrid products={products}/>
+        <ProductsGrid  getCartItems={getCartItems} products={products}/>
        
       </div>
     </div>

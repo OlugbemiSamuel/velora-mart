@@ -4,11 +4,15 @@ import logowhite from '../assets/images/logo-white.png'
 import mobileLogo from '../assets/images/mobile-logo-white.png'
 import carticon from '../assets/images/icons/cart-icon.png'
 import searchicon from '../assets/images/icons/search-icon.png'
+import { calculateCartQuantity } from '../utils/cartutils';
+import { useMemo } from 'react';
 
 
 
-const Header = () => {
+const Header = ({carts}) => {
 
+
+  const totalCartItems = useMemo(() => calculateCartQuantity(carts), [carts] )
     return(
            <div class="header">
       <div class="left-section">
@@ -35,7 +39,7 @@ const Header = () => {
 
         <Link class="cart-link header-link" to="/checkout">
           <img class="cart-icon" src={carticon} />
-          <div class="cart-quantity">3</div>
+          <div class="cart-quantity">{totalCartItems}</div>
           <div class="cart-text">Cart</div>
         </Link>
       </div>
