@@ -8,12 +8,11 @@ import OrderSummary from "./OrderSummary";
 import PaymentSummmary from "./PaymentSummary";
 import CheckoutHeader from "./CheckoutHeader";
 
-const CheckoutPage = ({ carts }) => {
+const CheckoutPage = ({ carts, getCartItems }) => {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummmary, setPaymentSummary] = useState(null);
 
-  useEffect(() => {
-    const getCheckoutPageData = async () => {
+   const getCheckoutPageData = async () => {
       try {
         const [deliveryRes, paymentRes] = await Promise.all([
            await axios.get("/api/delivery-options?expand=estimatedDeliveryTime"),
@@ -26,9 +25,12 @@ const CheckoutPage = ({ carts }) => {
         console.error("error loading checkout data:", error);
       }
     };
+
+  useEffect(() => {
+   
     getCheckoutPageData();
   
-  }, []);
+  }, [carts]);
 
   return (
     <>
@@ -45,7 +47,7 @@ const CheckoutPage = ({ carts }) => {
         <div class="page-title">Review your order</div>
 
         <div class="checkout-grid">
-          <OrderSummary carts={carts} deliveryOptions={deliveryOptions}/>
+          <OrderSummary getCartItems={getCartItems} carts={carts} deliveryOptions={deliveryOptions}/>
           <PaymentSummmary paymentSummmary={paymentSummmary}/>
          
 
