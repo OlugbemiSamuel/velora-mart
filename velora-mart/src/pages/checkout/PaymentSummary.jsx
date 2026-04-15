@@ -1,6 +1,30 @@
+import axios from "axios"
 import { formatMoney } from "../../utils/Money"
+import { useNavigate } from "react-router"
 
-const PaymentSummmary = ({paymentSummmary}) => {
+const PaymentSummmary = ({paymentSummmary, getCartItems, isLoading, setIsLoading}) => {
+  
+
+
+  const navigate = useNavigate();
+
+  const placeOrder = async () => {
+    if(paymentSummmary.totalItems <= 0) return
+     setIsLoading(true)
+    try{
+         await axios.post(`/api/orders`);
+         await getCartItems();
+         navigate('/orders');
+    } catch(error){
+      console.error('failed to place order:', error);
+    } finally{
+         setIsLoading(false);
+    }
+  };
+    const disable = !paymentSummmary || paymentSummmary.totalItems <= 0 || isLoading
+
+
+
     return(
          <div class="payment-summary">
             <div class="payment-summary-title">Payment Summary</div>
@@ -42,8 +66,8 @@ const PaymentSummmary = ({paymentSummmary}) => {
                   </div>
                 </div>
 
-                <button class="place-order-button button-primary">
-                  Place your order
+                <button  disabled={disable} onClick={placeOrder} class="place-order-button button-primary">
+                  {isLoading ? 'Placing Order....' : 'Place Order'}
                 </button>
               </>
             )}
