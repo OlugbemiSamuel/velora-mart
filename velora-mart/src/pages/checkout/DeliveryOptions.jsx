@@ -14,9 +14,13 @@ const DeliveryOptions = ({ deliveryOptions, cartItem, getCartItems }) => {
         }
 
         const updateDeliveryOption = async () => {
-          await axios.put(`/api/cart-items/${cartItem.productId}`, {
+          try{
+            await axios.put(`/api/cart-items/${cartItem.productId}`, {
             deliveryOptionId: deliveryOption.id,
           });
+          } catch(error){
+            console.error('update error:', error)
+          }
           await getCartItems();
         };
 
