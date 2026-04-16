@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import OrdersGrid from "./OrdersGrid";
 
-const OrdersPage = ({ carts }) => {
+const OrdersPage = ({ carts, getCartItems }) => {
   const [orders, setOrders] = useState([]);
+ const  [isLoading, setIsLoading] = useState(false);
   
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const OrdersPage = ({ carts }) => {
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
-        <OrdersGrid orders={orders} />
+        <OrdersGrid isLoading={isLoading} setIsLoading={setIsLoading} getCartItems={getCartItems} orders={orders} />
       </div>
     </>
   );

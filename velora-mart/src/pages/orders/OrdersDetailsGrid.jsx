@@ -3,8 +3,32 @@ import buyagain from "../../assets/images/icons/buy-again.png";
 import {Fragment} from 'react'
 import { Link } from "react-router";
 
+import axios from "axios";
 
-const OrdersDetailsGrid = ({order}) => {
+
+const OrdersDetailsGrid = ({order, getCartItems, setIsLoading, isLoading}) => {
+
+  
+
+
+   const addToCart = async (productId) => {
+    setIsLoading(true);
+    try{
+      await axios.post("/api/cart-items", {
+      productId: productId,
+      quantity: 1
+    });
+    getCartItems()
+    } catch(error){
+      console.error('failed to add item:', error)
+    } finally{
+      setIsLoading(false);
+    }
+  };
+
+  
+
+
     return(
         <div className="order-details-grid">
                   {order?.products?.map((orderProduct) => {
@@ -25,9 +49,9 @@ const OrdersDetailsGrid = ({order}) => {
                           <div className="product-quantity">
                             Quantity: {orderProduct.quantity}
                           </div>
-                          <button className="buy-again-button button-primary">
+                          <button disabled={isLoading} onClick={() => addToCart(orderProduct.product.id)} className="buy-again-button button-primary">
                             <img className="buy-again-icon" src={buyagain} />
-                            <span className="buy-again-message">Add to Cart</span>
+                            <span  className="buy-again-message">Add to Cart</span>
                           </button>
                         </div>
 

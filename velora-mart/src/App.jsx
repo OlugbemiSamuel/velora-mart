@@ -24,6 +24,8 @@ function App() {
     getCartItems();
   }, []);
 
+  window.axios   = axios;
+
   
 
 
@@ -38,7 +40,7 @@ function App() {
         path="tracking/:orderId/:productId"
         element={<TrackingPage carts={carts} />}
       />
-      <Route path="orders" element={<OrdersPage carts={carts} />} />
+      <Route path="orders" element={<OrdersPage getCartItems={getCartItems} carts={carts} />} />
       <Route path="*" element={<ErrorPage carts={carts} />} />
     </Routes>
   );

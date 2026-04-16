@@ -1,14 +1,14 @@
 import OrdersHeader from "./OrdersHeader";
 import OrdersDetailsGrid from "./OrdersDetailsGrid";
 
-const OrdersGrid = ({ orders }) => {
+const OrdersGrid = ({ orders, getCartItems, isLoading, setIsLoading,}) => {
   return (
     <div className="orders-grid">
       {orders.map((order) => {
         return (
           <div key={order.id} className="order-container">
             <OrdersHeader order={order} />
-            <OrdersDetailsGrid order={order} />
+          <OrdersDetailsGrid setIsLoading={setIsLoading} isLoading={isLoading} getCartItems={getCartItems} order={order} />
           </div>
         );
       })}

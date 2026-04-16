@@ -118,6 +118,11 @@
 .checkout-page .product-quantity .link-primary {
   margin-left: 3px;
 }
+.checkout-page .product-quantity .quantity-input {
+  width: 50px;
+  border: 5px;
+  border-color: #1b1818;
+}
 
 @media (max-width: 1000px) {
   .checkout-page .delivery-options {

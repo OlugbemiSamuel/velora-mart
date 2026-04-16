@@ -5,11 +5,21 @@ import mobileLogo from '../assets/images/mobile-logo-white.png'
 import carticon from '../assets/images/icons/cart-icon.png'
 import searchicon from '../assets/images/icons/search-icon.png'
 import { calculateCartQuantity } from '../utils/cartutils';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 
 
 const Header = ({carts}) => {
+
+  const [searchInput, setSearchInput] = useState('');
+
+  const onSearch = (e) => {
+    setSearchInput(e.target.value);
+  }
+
+  const HandleSearch = () => {
+    console.log(searchInput);
+  }
 
 
   const totalCartItems = useMemo(() => calculateCartQuantity(carts), [carts] )
@@ -25,9 +35,9 @@ const Header = ({carts}) => {
       </div>
 
       <div class="middle-section">
-        <input class="search-bar" type="text" placeholder="Search" />
+        <input value={searchInput} onChange={onSearch} class="search-bar" type="text" placeholder="Search" />
 
-        <button class="search-button">
+        <button onClick={HandleSearch} class="search-button">
           <img class="search-icon" src={searchicon} />
         </button>
       </div>
