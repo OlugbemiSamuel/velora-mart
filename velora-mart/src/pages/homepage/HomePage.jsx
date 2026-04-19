@@ -3,13 +3,20 @@ import "./HomePage.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductsGrid from "./ProductsGrid";
+import { useSearchParams } from "react-router";
 
 const HomePage = ({ carts, getCartItems }) => {
   const [products, setProducts] = useState([]);
 
+  const [searchParams] = useSearchParams();
+  
+
+  const searchInput = searchParams.get('search');
+
   const getProducts = async () => {
     try {
-      const response = await axios.get(`/api/products`);
+      const urlPath = searchInput ? `/api/products?search=${searchInput}` : '/api/products'
+      const response = await axios.get(urlPath);
       console.log(response);
       setProducts(response.data);
     } catch (err) {
@@ -19,7 +26,7 @@ const HomePage = ({ carts, getCartItems }) => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [searchInput]);
 
   return (
     <div>
