@@ -1,4 +1,4 @@
-import { it, describe, expect, vi } from "vitest";
+import { it, describe, expect, vi, beforeEach } from "vitest";
 import Products from "./Products";
 import { getByTestId, render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
@@ -7,8 +7,13 @@ import axios from "axios";
 vi.mock('axios')
 
 describe("Product component", () => {
-  it("displays the product details correctly", () => {
-    const product = {
+
+   let product 
+
+    let getCartItems;
+
+    beforeEach(() => {
+      product = {
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
       image: "images/products/athletic-cotton-socks-6-pairs.jpg",
       name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
@@ -20,7 +25,13 @@ describe("Product component", () => {
       keywords: ["socks", "sports", "apparel"],
     };
 
-    const getCartItems = vi.fn();
+     getCartItems = vi.fn();
+
+    })
+
+
+  it("displays the product details correctly", () => {
+   
 
     render(<Products product={product} getCartItems={getCartItems} />);
 
@@ -43,26 +54,14 @@ describe("Product component", () => {
 
     expect(
       screen.getByText('87')
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
 
   });
 
 
   it("Add products to cart", async () => {
 
-        const product = {
-      id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-      image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-      name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-      rating: {
-        stars: 4.5,
-        count: 87,
-      },
-      priceCents: 1090,
-      keywords: ["socks", "sports", "apparel"],
-    };
-
-    const getCartItems = vi.fn();
+    
 
     render(<Products product={product} getCartItems={getCartItems} />);
 
