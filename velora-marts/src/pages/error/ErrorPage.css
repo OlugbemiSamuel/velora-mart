@@ -1,0 +1,56 @@
+/* .error-page .error-number {
+    font-size: x-large;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+}
+
+.error-page .error-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+} */
+
+/* Container to center content both ways */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; 
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Big, bold 404 text */
+.error-page .error-number {
+  font-size: 8rem;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+  color:  #e70f0f;
+  
+}
+
+
+.error-page .error-text {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.error-number {
+  animation: bounce 2s ease-in-out infinite;
+}
