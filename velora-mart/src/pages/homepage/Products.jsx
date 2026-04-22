@@ -27,7 +27,7 @@ const Products = ({ product, getCartItems }) => {
   };
 
   return (
-    <div className="product-container">
+    <div data-testId='product-container' className="product-container">
       <div className="product-image-container">
         <img className="product-image" data-testId = 'product-image' src={product.image} />
       </div>
