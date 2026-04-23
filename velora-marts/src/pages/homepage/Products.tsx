@@ -1,15 +1,22 @@
 import { formatMoney } from "../../utils/money";
 import checkmark from "../../assets/images/icons/checkmark.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import type { Product } from "../../types/ecommerce";
 
-const Products = ({ product, getCartItems }) => {
+interface ProductsProp {
+  product: Product;
+  getCartItems: () => void;
+}
+
+const Products = ({ product, getCartItems }: ProductsProp) => {
   const [quantity, setQuantity] = useState(1);
   const [showAdded, setShowAdded] = useState(false);
+  const [timerId, setTimerId] = useState<number | null>(null);
 
-  const removeAdded = setTimeout(() => {
-    setShowAdded(false);
-  }, 2000);
+  useEffect(() => {
+    return () => {if(timerId) clearTimeout(timerId)}
+  }, [timerId]);
 
   const addToCart = async () => {
     try {
@@ -19,28 +26,42 @@ const Products = ({ product, getCartItems }) => {
       });
       getCartItems();
 
+      if (timerId) clearTimeout(timerId);
+      console.log(timerId, 'timer')
+
       setShowAdded(true);
-      removeAdded;
+      const timer = window.setTimeout(() => {
+        setShowAdded(false);
+      }, 2000);
+
+      setTimerId(timer);
     } catch (error) {
       console.error("failed to add product:", error);
     }
   };
 
   return (
-    <div data-testId='product-container' className="product-container">
+    <div data-testId="product-container" className="product-container">
       <div className="product-image-container">
-        <img className="product-image" data-testId = 'product-image' src={product.image} />
+        <img
+          className="product-image"
+          data-testId="product-image"
+          src={product.image}
+        />
       </div>
 
-      <div className="product-name limit-text-to-2-lines">{product.name}</div>
+      <div className="product-name limit-text-to-2-lines ">{product.name}</div>
 
       <div className="product-rating-container">
         <img
           className="product-rating-stars"
-          data-testId= 'product-rating-stars'
+          data-testId="product-rating-stars"
           src={`images/ratings/rating-${product.rating.stars * 10}.png`}
         />
-        <div className="product-rating-count link-primary " data-testId='product-rating-count'>
+        <div
+          className="product-rating-count link-primary "
+          data-testId="product-rating-count"
+        >
           {product.rating.count}
         </div>
       </div>
@@ -72,7 +93,11 @@ const Products = ({ product, getCartItems }) => {
         Added
       </div>
 
-      <button data-testId='add-to-cart-button' onClick={addToCart} className="add-to-cart-button button-primary">
+      <button
+        data-testId="add-to-cart-button"
+        onClick={addToCart}
+        className="add-to-cart-button button-primary"
+      >
         Add to Cart
       </button>
     </div>

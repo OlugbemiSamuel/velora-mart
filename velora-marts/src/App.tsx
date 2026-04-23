@@ -7,14 +7,16 @@ import OrdersPage from "./pages/orders/OrdersPage";
 import ErrorPage from "./pages/error/ErrorPage";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import type { CartItem } from "./types/ecommerce";
 
 function App() {
-  const [carts, setCarts] = useState([]);
+  const [carts, setCarts] = useState<CartItem[]>([]);
 
   const getCartItems = async () => {
     try {
       const response = await axios.get(`/api/cart-items?expand=product`);
-      setCarts(response.data);
+      const data = response.data as CartItem[];
+      setCarts(data);
     } catch (error) {
       console.error(`carterror:`, error);
     }
@@ -24,7 +26,7 @@ function App() {
     getCartItems();
   }, []);
 
-  window.axios   = axios;
+  // window.axios   = axios;
   
 
   

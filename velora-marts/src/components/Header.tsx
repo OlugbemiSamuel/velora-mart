@@ -7,7 +7,16 @@ import searchicon from "../assets/images/icons/search-icon.png";
 import { calculateCartQuantity } from "../utils/cartUtils";
 import { useMemo, useState } from "react";
 
-const Header = ({ carts }) => {
+
+interface HeaderProps  {
+  carts:{
+    productId: string;
+    quantity: number;
+
+  }[]
+}
+
+const Header = ({ carts }: HeaderProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get("search");

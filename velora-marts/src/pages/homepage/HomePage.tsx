@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductsGrid from "./ProductsGrid";
 import { useSearchParams } from "react-router";
+import type { CartItem, Product } from "../../types/ecommerce";
 
-const HomePage = ({ carts, getCartItems }) => {
-  const [products, setProducts] = useState([]);
+interface HomePageProps {
+  carts: CartItem[];
+  getCartItems: () => void;
+}
+
+const HomePage = ({ carts, getCartItems }: HomePageProps) => {
+  const [products, setProducts] = useState<Product[]>([]);
 
   const [searchParams] = useSearchParams();
   
