@@ -15,7 +15,9 @@ const Products = ({ product, getCartItems }: ProductsProp) => {
   const [timerId, setTimerId] = useState<number | null>(null);
 
   useEffect(() => {
-    return () => {if(timerId) clearTimeout(timerId)}
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   }, [timerId]);
 
   const addToCart = async () => {
@@ -27,7 +29,7 @@ const Products = ({ product, getCartItems }: ProductsProp) => {
       getCartItems();
 
       if (timerId) clearTimeout(timerId);
-      console.log(timerId, 'timer')
+      console.log(timerId, "timer");
 
       setShowAdded(true);
       const timer = window.setTimeout(() => {
@@ -88,9 +90,13 @@ const Products = ({ product, getCartItems }: ProductsProp) => {
 
       <div className="product-spacer"></div>
 
-      <div style={{ opacity: showAdded ? 1 : 0 }} className="added-to-cart">
-        <img src={checkmark} />
-        Added
+      <div
+        className={`flex items-center gap-1 text-green-600 font-medium transition-all duration-300 ${
+          showAdded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+        }`}
+      >
+        <img src={checkmark} className="w-5 h-5" />
+        <span>Added</span>
       </div>
 
       <button
