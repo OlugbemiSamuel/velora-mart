@@ -43,66 +43,72 @@ const Products = ({ product, getCartItems }: ProductsProp) => {
   };
 
   return (
-    <div data-testId="product-container" className="product-container">
-      <div className="product-image-container">
+    <div
+      data-testid="product-container"
+      className="flex flex-col border border-gray-200 bg-white p-4 transition-shadow hover:shadow-lg rounded-sm"
+    >
+      <div className="mb-4 flex h-40 items-center justify-center">
         <img
-          className="product-image"
-          data-testId="product-image"
+          className="max-h-full max-w-full object-contain"
+          data-testid="product-image"
           src={product.image}
+          alt={product.name}
         />
       </div>
 
-      <div className="product-name limit-text-to-2-lines ">{product.name}</div>
+      <div className="mb-2 h-10 text-sm font-medium leading-tight text-gray-900 line-clamp-2">
+        {product.name}
+      </div>
 
-      <div className="product-rating-container">
+      <div className="mb-2 flex items-center gap-1">
         <img
-          className="product-rating-stars"
-          data-testId="product-rating-stars"
-          src={`images/ratings/rating-${product.rating.stars * 10}.png`}
+          className="w-20 object-contain"
+          data-testid="product-rating-stars"
+          src={`images/ratings/rating-${(product.rating?.stars ?? 0) * 10}.png`}
         />
         <div
           className="product-rating-count link-primary "
-          data-testId="product-rating-count"
+          data-testid="product-rating-count"
         >
-          {product.rating.count}
+          {product.rating?.count ?? 0}
         </div>
       </div>
 
-      <div className="product-price">{formatMoney(product.priceCents)}</div>
+      <div className="mb-3 text-base font-bold text-gray-900">
+        {formatMoney(product.priceCents)}
+      </div>
 
-      <div className="product-quantity-container">
+      <div className="mb-4">
         <select
+          name="quantity"
+          className=" rounded-md border border-gray-300 bg-gray-50 p-1.5 text-sm cursor-pointer focus:border-yellow-500! focus:ring-2! focus:ring-yellow-200! outline-none! transition-all"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
         >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
+          {[...Array(10)].map((_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
         </select>
       </div>
 
-      <div className="product-spacer"></div>
+      <div className="grow"></div>
 
+      {/* Added notification message */}
       <div
-        className={`flex items-center gap-1 text-green-600 font-medium transition-all duration-300 ${
-          showAdded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+        className={`mb-2 flex items-center gap-1 text-green-600 text-xs font-medium transition-all duration-300 transform ${
+          showAdded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
         }`}
       >
-        <img src={checkmark} className="w-5 h-5" />
-        <span>Added</span>
+        <img src={checkmark} className="w-3 h-3" />
+        Added
       </div>
 
       <button
-        data-testId="add-to-cart-button"
+        data-testid="add-to-cart-button"
         onClick={addToCart}
-        className="add-to-cart-button button-primary"
+        className="w-full rounded-full bg-yellow-400 py-2 text-sm font-medium text-black transition-colors hover:bg-yellow-500 active:bg-yellow-600 shadow-sm"
       >
         Add to Cart
       </button>

@@ -2,7 +2,7 @@ export interface Product {
     id: string;
     name: string;
     image: string;
-    rating: {
+    rating?: {
         count: number;
         stars: number
     };
