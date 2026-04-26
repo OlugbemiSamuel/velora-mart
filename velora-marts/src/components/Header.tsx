@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router";
-import "./header.css";
+// import "./header.css";
 import logowhite from "../assets/images/logo-white.png";
 import mobileLogo from "../assets/images/mobile-logo-white.png";
 import carticon from "../assets/images/icons/cart-icon.png";
@@ -31,7 +31,7 @@ const Header = ({ carts }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full bg-slate-900 text-white shadow-md transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
+
         {/* LEFT SECTION: Logo */}
         <div className="flex shrink0 items-center">
           <NavLink to="/" className="transition-opacity hover:opacity-80">
@@ -70,14 +70,14 @@ const Header = ({ carts }: HeaderProps) => {
 
        {/* RIGHT SECTION: Navigation */}
         <div className="flex items-center gap-6">
-          <Link 
+          <NavLink 
             className=" text-sm sm:text-base font-medium transition-colors hover:text-yellow-400 sm:block" 
             to="/orders"
           >
             Orders
-          </Link>
+          </NavLink>
 
-          <Link 
+          <NavLink 
             className="relative flex items-center gap-1 transition-transform active:scale-95" 
             to="/checkout"
           >
@@ -90,7 +90,7 @@ const Header = ({ carts }: HeaderProps) => {
               )}
             </div>
             <span className="hidden text-sm sm:text-base font-bold sm:block">Cart</span>
-          </Link>
+          </NavLink>
         </div>
       </div>
     </header>

@@ -1,6 +1,5 @@
 import "./CheckoutHeader.css";
 import "./Checkout.css";
-import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -43,10 +42,10 @@ const CheckoutPage = ({ carts, getCartItems }) => {
       <CheckoutHeader carts={carts} />
 
       {carts.length > 0 ? (
-        <div class="checkout-page">
-          <div class="page-title">Review your order</div>
+        <div className="checkout-page">
+          <div className="page-title">Review your order</div>
 
-          <div class="checkout-grid">
+          <div className="checkout-grid">
             <OrderSummary
               getCartItems={getCartItems}
               carts={carts}
@@ -75,7 +74,7 @@ const CheckoutPage = ({ carts, getCartItems }) => {
         </div>
       )}
 
-      {/* <div class="checkout-header">
+      {/* <div className="checkout-header">
       </div> */}
     </>
   );

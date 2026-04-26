@@ -4,48 +4,40 @@ import axios from "axios";
 
 const DeliveryOptions = ({ deliveryOptions, cartItem, getCartItems }) => {
   return (
-    <div className="delivery-options">
-      <div className="delivery-options-title">Choose a delivery option:</div>
+    <div className="flex flex-col gap-3">
+      <p className="font-bold text-gray-900">Choose a delivery option:</p>
       {deliveryOptions.map((deliveryOption) => {
-        let shippingFee = "FREE Shipping";
-
-        if (deliveryOption.priceCents > 0) {
-          shippingFee = formatMoney(deliveryOption.priceCents);
-        }
+        const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+        const shippingFee = deliveryOption.priceCents === 0 ? "FREE " : formatMoney(deliveryOption.priceCents);
 
         const updateDeliveryOption = async () => {
-          try{
-            await axios.put(`/api/cart-items/${cartItem.productId}`, {
-            deliveryOptionId: deliveryOption.id,
-          });
-          } catch(error){
-            console.error('update error:', error)
+          await axios.put(`/api/cart-items/${cartItem.productId}`, {
+            deliveryOptionId: deliveryOption.id
+            });
+            await getCartItems();
           }
-          await getCartItems();
-        };
 
         return (
-          <div
-            onClick={updateDeliveryOption}
+          <label 
+          onClick={updateDeliveryOption}
             key={deliveryOption.id}
-            className="delivery-option"
+            className={`flex cursor-pointer items-start gap-3 rounded-md border p-3 transition-colors ${
+              isChecked ? "border-yellow-100 bg-yellow-50" : "border-gray-200 hover:bg-gray-50"
+            }`}
           >
             <input
-              onChange={() => {}}
               type="radio"
-              checked={deliveryOption.id === cartItem.deliveryOptionId}
-              className="delivery-option-input"
-              name={`delivery-option-${cartItem.productId}`}
+              className="mt-1 h-4 w-4 bg-yellow-50"
+              checked={isChecked}
+              onChange={() => {}}
             />
-            <div>
-              <div className="delivery-option-date">
-                {dayjs(deliveryOption.estimatedDeliveryTimeMs).format(
-                  "dddd, MMMM D",
-                )}
-              </div>
-              <div className="delivery-option-price">{shippingFee}</div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-green-700">
+                {dayjs(deliveryOption.estimatedDeliveryTimeMs).format("dddd, MMMM D")}
+              </span>
+              <span className="text-xs text-gray-500">{shippingFee} - Shipping</span>
             </div>
-          </div>
+          </label>
         );
       })}
     </div>
